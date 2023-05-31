@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block con %}
+<h1><b>BOOK PAGE</b></h1>
+
+<div class="text-end">
+    <a href="{% url 'book:create' %}" class="btn btn-success"> + BOOKMARK </a>
+</div>
+
+<div class="row">
+    {% for i in bset %}
+        <div class="col-sm-4 mb-3 mb-sm-0 mt-4">
+            <div class="card" {% if i.impo %} style="background-color: antiquewhite;" {% endif %}>
+                <div class="card-body">
+                    <h5 class="card-title"><b>{{ i.site_name }}</b></h5>
+                    <p class="card-text">{{ i.site_con|truncatechars:20 }}</p>
+                    <a href="{{ i.site_url }}" class="btn btn-outline-primary">사이트 이동</a>
+                    <a href="{% url 'book:update' i.id %}" class="btn btn-outline-secondary">수정</a>
+                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#e{{ forloop.counter }}">
+                        삭제
+                    </button>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+
+    {% endfor %}
+</div>
+
+{% for i in bset %}
+    <!-- 삭제모달창 -->
+    <div class="modal fade" id="e{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">북마크 삭제 알림창</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    정말 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                    <a href="{% url 'book:delete' i.id %}" class="btn btn-danger">북마크 삭제</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
+
+{% endblock %}
+

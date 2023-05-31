@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block con %}
+<h1><b>북마크 수정</b></h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <div class="text-end">
+            <input name="impo" type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off" {% if b.impo %} checked {% endif %}>
+            <label class="btn btn-outline-warning" for="btn-check-outlined">✨</label><br>
+        </div>
+        <input type="text" name="sname" value="{{ b.site_name }}" class="form-control mt-3">
+        <input type="text" name="surl" value="{{ b.site_url }}" class="form-control mt-4 mb-4">
+        <textarea class="form-control" name="scon" style="height: 100px;">{{ b.site_con }}</textarea>
+    
+        <div class="text-end mt-5">
+            <button class="btn btn-dark">수정</button>
+            <a href="{% url 'book:index' %}" class="btn btn-secondary">뒤로가기</a>
+        </div>
+    </form>
+{% endblock %}

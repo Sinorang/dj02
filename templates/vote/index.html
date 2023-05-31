@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block con %}
+<h1><b>투표소</b></h1>
+
+<div class="text-end">
+    <a href="{% url 'vote:create' %}" class="btn btn-dark">토픽생성</a>
+</div>
+
+<div class="row">
+    {% for i in tset %}
+        <div class="col-sm-4 mt-4">
+            <div class="card">
+                <img src="{{ i.maker.getpic }}" width="100%" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"><b><mark>{{ i.subject }}</mark></b></h5>
+                    <p class="card-text">{{ i.content|truncatewords:8 }}</p>
+                    {% if user in i.voter.all %}
+                        <div class="text-center">
+                            <a href="{% url 'vote:detail' i.id %}" class="btn btn-outline-dark">결과보기</a>
+                        {% if i.maker == user %}
+                            <a href="{% url 'vote:update' i.id %}" class="btn btn-outline-primary">수정</a>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#e{{ forloop.counter }}">
+                                삭제
+                            </button>
+                        {% endif %}
+                        </div>
+                    {% else %}
+                        <div class="text-center">
+                            <a href="{% url 'vote:detail' i.id %}" class="btn btn-outline-dark">투표하기</a>
+                            {% if i.maker == user %}
+                                <a href="{% url 'vote:update' i.id %}" class="btn btn-outline-primary">수정</a>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#e{{ forloop.counter }}">
+                                    삭제
+                                </button>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <div class="mt-4">
+                        투표 참가자 : 
+                        {% for i in i.voter.all %}
+                            <b>{{ i }}</b>
+                        {% endfor %}
+                        (총 {{ i.voter.count }}명)
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+{% for i in tset %}
+    <!-- Modal -->
+    {% if user == i.maker %}
+        <div class="modal fade" id="e{{ forloop.counter }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel"><b>{{ i.subject }}</b> 토픽 삭제 알림창</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <mark><b>{{ i.voter.count }}</b></mark>명이 참여한 투표입니다. 그래도 삭제하시겠습니까?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                        <a href="{% url 'vote:delete' i.id %}" type="button" class="btn btn-danger">삭제</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+
+{% endblock %}

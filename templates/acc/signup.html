@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <h1><b>회원가입 페이지</b></h1>
+    <br>
+
+    <form method="POST" enctype="multipart/form-data" name="createForm">
+    {% csrf_token %}
+        <label class="form-label mt-5">ID</label>
+        <input type="text" class="form-control" name="username">
+
+        <label class="form-label mt-4">PASSWORD</label>
+        <input type="password" class="form-control" name="upassword">
+
+        <label class="form-label mt-4">CHECK PASSWORD</label>
+        <input type="password" class="form-control" name="uchpassword">
+
+        <label class="form-label mt-4">프로필 이미지</label>
+        <input type="file" class="form-control" name="upic">
+
+        <label class="form-label mt-4">소개글</label>
+        <textarea class="form-control" name="ucomment"></textarea> 
+
+        <div class="text-end mt-4">
+            <button class="btn btn-dark btn-lg" type="button" onclick="check()">회원가입</button>
+        </div>
+    </form>
+
+    <script>
+        function check(){
+            cf = document.createForm;
+            if(!cf.username.value){
+                alert("USERNAME 을 입력해주세요")
+            }
+            else if(!cf.upassword.value){
+                alert("PASSWORD 를 입력해주세요")
+            }else if(cf.upassword.value != cf.uchpassword.value){
+                alert("PASSWORD 를 확인해주세요 (불일치)")
+            }else if(cf.ucomment.value.length < 10){
+                alert("최소 10자 이상은 입력해주시기 바랍니다")
+            }else{
+                cf.submit();
+            }
+        }
+    </script>
+{% endblock %}
